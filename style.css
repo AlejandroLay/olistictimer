@@ -1,0 +1,97 @@
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header {
+    background-color: #4a90e2;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.logo-header {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+}
+
+.month-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    margin: 20px 0;
+}
+
+.month-nav button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#month-year {
+    font-weight: bold;
+}
+
+#calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    max-width: 400px;
+    width: 100%;
+}
+
+.day, .weekday {
+    border: 1px solid #ccc;
+    padding: 10px 0;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.weekday {
+    background-color: #e0e0e0;
+    font-weight: bold;
+}
+
+.taken {
+    background-color: lightgreen;
+}
+
+button#mark-taken {
+    margin-top: 20px;
+    padding: 15px;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    background-color: #4a90e2;
+    color: white;
+    width: 90%;
+    max-width: 400px;
+    cursor: pointer;
+}
+
+button#mark-taken:active {
+    background-color: #357ABD;
+}
