@@ -1,6 +1,7 @@
+
 self.addEventListener('install', e => {
     e.waitUntil(
-        caches.open('olistictimer').then(cache => {
+        caches.open('healtrack').then(cache => {
             return cache.addAll([
                 './',
                 './index.html',
@@ -23,22 +24,4 @@ self.addEventListener('fetch', e => {
             return response || fetch(e.request);
         })
     );
-});
-
-// 🔔 Preparado para Push Notifications (pendiente de que iOS lo habilite completamente)
-self.addEventListener('push', e => {
-    const data = e.data ? e.data.json() : {};
-    const title = data.title || "Olistic Timer";
-    const options = {
-        body: data.body || "Recuerda tomar tu Olistic 💊",
-        icon: './assets/icon-192.png',
-        badge: './assets/icon-192.png'
-    };
-    e.waitUntil(self.registration.showNotification(title, options));
-});
-
-// 🔔 Acción al hacer click en la notificación
-self.addEventListener('notificationclick', e => {
-    e.notification.close();
-    e.waitUntil(clients.openWindow('./'));
 });

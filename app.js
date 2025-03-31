@@ -1,24 +1,30 @@
 
 const calendarEl = document.getElementById("calendar");
-const markBtn = document.getElementById("mark-taken");
+const markOlistic = document.getElementById("mark-olistic");
+const markFinasterida = document.getElementById("mark-finasterida");
+const markMinoxil = document.getElementById("mark-minoxil");
 const monthYearEl = document.getElementById("month-year");
 const prevBtn = document.getElementById("prev-month");
 const nextBtn = document.getElementById("next-month");
 
 let currentDate = new Date();
-let takenDays = JSON.parse(localStorage.getItem("takenDays") || "[]");
+let records = JSON.parse(localStorage.getItem("records") || "{}");
 
-markBtn.addEventListener("click", () => {
-    const today = new Date().toISOString().slice(0, 10);
-    if (!takenDays.includes(today)) {
-        takenDays.push(today);
-        localStorage.setItem("takenDays", JSON.stringify(takenDays));
-        renderCalendar();
-        alert("¡Olistic registrado hoy!");
-    } else {
-        alert("Ya registraste Olistic hoy.");
-    }
-});
+function getToday() {
+    return new Date().toISOString().slice(0, 10);
+}
+
+function saveRecord(type) {
+    const today = getToday();
+    if (!records[today]) records[today] = [];
+    if (!records[today].includes(type)) records[today].push(type);
+    localStorage.setItem("records", JSON.stringify(records));
+    renderCalendar();
+}
+
+markOlistic.addEventListener("click", () => saveRecord("olistic"));
+markFinasterida.addEventListener("click", () => saveRecord("finasterida"));
+markMinoxil.addEventListener("click", () => saveRecord("minoxil"));
 
 prevBtn.addEventListener("click", () => {
     currentDate.setMonth(currentDate.getMonth() - 1);
@@ -34,10 +40,9 @@ function renderCalendar() {
     calendarEl.innerHTML = "";
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
-
     monthYearEl.textContent = currentDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
 
-    const firstDay = new Date(year, month, 1).getDay();
+    const firstDay = new Date(year, month, 1).getDay() || 7;
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
     const weekdays = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
@@ -48,7 +53,7 @@ function renderCalendar() {
         calendarEl.appendChild(dayEl);
     });
 
-    for (let i = 0; i < (firstDay === 0 ? 6 : firstDay - 1); i++) {
+    for (let i = 1; i < firstDay; i++) {
         const emptyCell = document.createElement("div");
         calendarEl.appendChild(emptyCell);
     }
@@ -59,32 +64,31 @@ function renderCalendar() {
         const div = document.createElement("div");
         div.classList.add("day");
         div.textContent = day;
-        if (takenDays.includes(dateStr)) {
-            div.classList.add("taken");
+
+        if (records[dateStr]) {
+            if (records[dateStr].includes("olistic")) div.classList.add("taken-olistic");
+            if (records[dateStr].includes("finasterida")) div.classList.add("taken-finasterida");
+            if (records[dateStr].includes("minoxil")) div.classList.add("taken-minoxil");
         }
+
         calendarEl.appendChild(div);
     }
 }
 
-// === NOTIFICACIÓN ===
+// Notificación diaria a las 11:00
 if ('Notification' in window) {
-    Notification.requestPermission();
-    scheduleNotification();
+    Notification.requestPermission().then(() => scheduleNotification());
 }
 
 function scheduleNotification() {
     const now = new Date();
     const notificationTime = new Date();
     notificationTime.setHours(11, 0, 0, 0);
-
-    if (now > notificationTime) {
-        notificationTime.setDate(notificationTime.getDate() + 1);
-    }
-
+    if (now > notificationTime) notificationTime.setDate(notificationTime.getDate() + 1);
     const timeout = notificationTime - now;
 
     setTimeout(() => {
-        new Notification("Recuerda tomar Olistic 💊");
+        new Notification("No olvides registrar tu Olistic, Finasterida y Minoxil");
         scheduleNotification();
     }, timeout);
 }

@@ -1,10 +1,11 @@
+
 {
-    "name": "Olistic Timer",
-    "short_name": "Olistic",
+    "name": "HealTrack",
+    "short_name": "HealTrack",
     "start_url": "./index.html",
     "display": "standalone",
-    "background_color": "#f8f8f8",
-    "theme_color": "#4a90e2",
+    "background_color": "#E2C5AA",
+    "theme_color": "#E2C5AA",
     "gcm_sender_id": "103953800507",
     "icons": [
         {
